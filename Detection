@@ -1,0 +1,34 @@
+// DETECTION
+// Training
+!yolo task=detect mode=train model=yolov8m.pt data=data.yaml \
+  epochs=50 imgsz=640 \
+  batch=8 \
+  lr0=0.001 lrf=0.01 \
+  warmup_epochs=3 warmup_momentum=0.8 warmup_bias_lr=0.1 \
+  patience=15 \
+  optimizer=AdamW \
+  dropout=0.1 weight_decay=0.0003 \
+  box=7.5 cls=0.5 dfl=1.5 \
+  mosaic=0.4 hsv_h=0.015 hsv_s=0.4 hsv_v=0.3 \
+  degrees=5 translate=0.1 scale=0.4 shear=2 \
+  fliplr=0.5 flipud=0.1 \
+  auto_augment=randaugment \
+  amp=True cache=True plots=True simplify=True \
+  close_mosaic=10 deterministic=True seed=0
+
+// Validation
+!yolo task=detect mode=val model=path/to/best.pt data=data.yaml \
+  imgsz=640 \
+  conf=0.25 iou=0.5 \
+  half=True \
+  plots=True save_txt=True save_conf=True \
+  deterministic=True
+
+// Testing
+!yolo task=detect mode=val model=path/to/best.pt data=data.yaml \
+  split=test \
+  imgsz=640 \
+  conf=0.25 iou=0.5 \
+  half=True \
+  plots=True save_txt=True save_conf=True \
+  deterministic=True
